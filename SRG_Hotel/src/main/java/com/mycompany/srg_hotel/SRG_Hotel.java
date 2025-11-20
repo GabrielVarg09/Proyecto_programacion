@@ -11,5 +11,6 @@ package com.mycompany.srg_hotel;
 public class SRG_Hotel {
 
     public static void main(String[] args) {          
+        
     }
 }
