@@ -17,7 +17,7 @@ public class GestorReserva {
     private int contadorReservas;
     private int contadorHabitaciones;
 
-    public GestorReservas(int tamanoHabitaciones, int tamanoReservas) {
+    public GestorReserva(int tamanoHabitaciones, int tamanoReservas) {
         habitaciones = new Habitacion[tamanoHabitaciones];
         reservas = new Reserva[tamanoReservas];
         contadorHabitaciones = 0;
