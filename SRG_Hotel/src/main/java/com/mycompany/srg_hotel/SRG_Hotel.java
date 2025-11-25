@@ -12,5 +12,7 @@ public class SRG_Hotel {
 
     public static void main(String[] args) {          
         
+        
+        
     }
 }
