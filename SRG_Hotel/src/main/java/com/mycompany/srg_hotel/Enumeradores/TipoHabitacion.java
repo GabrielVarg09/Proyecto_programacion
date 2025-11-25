@@ -10,8 +10,7 @@ package com.mycompany.srg_hotel.Enumeradores;
  */
 public enum TipoHabitacion {
     
-    Individual,
+    Simple,
     Doble,
-    Triple,
-    Cuadruple;
+    Suite;
 }

@@ -18,80 +18,42 @@ public class MenuPrincipal {
         gestor = new GestorReserva(50, 50);
     }
 
-    public void mostrarMenu() {
-        
-        int opcion = 0;
+        public void mostrarMenu() {
+        int opcion;
 
         do {
-            String[] opciones = {"Registrar clientes","Registrar habitaciones","Reservas","Salir"};
+            String[] opciones = {"Registrar habitaciones","Crear reserva","Listar reservas","Buscar reserva","Cancelar reserva","Salir"};
             opcion = JOptionPane.showOptionDialog(null, 
                     "Seleccione una opcion del sistema del hotel", 
                     "Sistema de Hotel", JOptionPane.DEFAULT_OPTION, 
                     JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
-            
-            switch (opcion) {
-                
-                case 0:
-                    menuClientes();
-                    break;
-                case 1:
-                    menuHabitaciones();
-                    break;
-                case 2:
-                    menuReservas();
-                    break;
-                case 3:
-                    break;
-            default:
-                JOptionPane.showMessageDialog(null, "Opción no válida");
-        }
-
-        } while (opcion != 3);
-    }
-
-    private void menuClientes() {
-        Cliente cliente = new Cliente();
-        cliente.registrarCliente();
-        JOptionPane.showMessageDialog(null, cliente.mostrarCliente());
-     }
-
-    private void menuHabitaciones() {
-        
-        gestor.registrarHabitacion();
-    }
-           
-    private void menuReservas() {
-        int opcion;
-
-        do {
-            String[] opcionreserva = {"Crear reserva","Listar reservas","Buscar reserva","Cancelar reserva","Volver al menú"};
-            opcion = JOptionPane.showOptionDialog(null, 
-                    "Seleccione una opcion del sistema de reservas del hotel", 
-                    "Sistema de Hotel", JOptionPane.DEFAULT_OPTION, 
-                    JOptionPane.INFORMATION_MESSAGE, null, opcionreserva, opcionreserva[0]);
 
             switch (opcion) {
                 case 0: 
-                    gestor.crearReserva();
+                    gestor.registrarHabitacion();
                     break;
                 case 1:
-                    gestor.listarReservas();
+                    gestor.crearReserva();
                     break;
 
                 case 2:
-                    gestor.buscarReserva();
+                     gestor.listarReservas(); 
                     break;
 
                 case 3:
+                    gestor.buscarReserva(); 
+                    break;
+                    
+                case 4: 
                     gestor.cancelarReserva();
                     break;
-
-                case 4:   
+                    
+                case 5:
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opcion no valida.");
             }
 
-        } while (opcion != 4);
+        } while (opcion != 5);
     }
 }
