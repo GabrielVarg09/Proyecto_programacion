@@ -26,26 +26,34 @@ public class GestorReserva {
 
     public void registrarHabitacion() {
         if (contadorHabitaciones >= habitaciones.length) {
-            JOptionPane.showMessageDialog(null,
-                    "No hay espacio para mas habitaciones");
+            JOptionPane.showMessageDialog(null, "No hay espacio para mas habitaciones");
         } else {
-            String lectura;
+            int numero;
 
-            lectura = JOptionPane.showInputDialog("Digite el numero de la habitacion:");
-            int numero = Integer.parseInt(lectura);
+            while (true) {
+                String lectura = JOptionPane.showInputDialog("Digite el numero de la habitacion:");
+                numero = Integer.parseInt(lectura);
+                boolean repeticion = false;
 
-            String tipo = JOptionPane.showInputDialog(
-                    "Digite el tipo de habitacion (simple, doble, suite):");
-
-            lectura = JOptionPane.showInputDialog("Digite el precio por noche:");
-            double precio = Double.parseDouble(lectura);
+                for (int i = 0; i < contadorHabitaciones; i++) {
+                    if (habitaciones[i].getNumeroHabitacion() == numero) {
+                        repeticion = true;
+                        break;
+                    }
+                }
+                if (repeticion) {
+                    JOptionPane.showMessageDialog(null, "La habitacion " + "#" + numero + " ya esta definida");
+                } else {
+                    break;
+                }
+            }
+            String tipo = JOptionPane.showInputDialog("Digite el tipo de habitacion (simple, doble, suite):");
+            String lecturaPrecio = JOptionPane.showInputDialog("Digite el precio por noche:");
+            double precio = Double.parseDouble(lecturaPrecio);
 
             Habitacion nueva = new Habitacion(numero, tipo, precio);
             habitaciones[contadorHabitaciones] = nueva;
             contadorHabitaciones++;
-
-            JOptionPane.showMessageDialog(null,
-                    "Habitacion registrada correctamente");
         }
     }
 
@@ -55,14 +63,36 @@ public class GestorReserva {
                     "No hay espacio para mas reservas");
             return;
         }
-
-        Habitacion habitacionDisponible = obtenerHabitacionDisponible();
-
-        if (habitacionDisponible == null) {
-            JOptionPane.showMessageDialog(null,
-                    "No hay habitaciones disponibles");
+        String lista = "Habitaciones disponibles:\n";
+        for (int i = 0; i < contadorHabitaciones; i++) {
+            if (habitaciones[i] != null && habitaciones[i].isDisponible()) {
+                lista += (i + 1) + ". Habitacion #" + habitaciones[i].getNumeroHabitacion() + " (" + habitaciones[i].getTipo() + ") " + "₡"
+                + habitaciones[i].getPrecioPorNoche() + "\n";
+            }
+        }
+        if (lista.equals("Habitaciones disponibles:\n")) {
+            JOptionPane.showMessageDialog(null, "No hay habitaciones disponibles");
             return;
         }
+        int seleccion = Integer.parseInt(JOptionPane.showInputDialog(lista + "\nSeleccione una habitacion:"));
+        while (true) {
+
+            if (seleccion < 1 || seleccion > contadorHabitaciones) {
+                JOptionPane.showMessageDialog(null, "La habitacion no existe.");
+            } else {
+                Habitacion habitacion = habitaciones[seleccion - 1];
+
+                if (habitacion.isDisponible()) {
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "La habitacion esta ocupada.");
+                }
+            }
+            seleccion = Integer.parseInt(JOptionPane.showInputDialog("Seleccione otra habitacion: " + "\n" + lista + "\n"));
+
+        }
+
+        Habitacion habitacionDisponible = habitaciones[seleccion - 1];
 
         // Registrar datos del cliente
         Cliente cliente = new Cliente();
@@ -103,7 +133,7 @@ public class GestorReserva {
         String texto = "";
 
         for (int i = 0; i < contadorReservas; i++) {
-            if (reservas[i] != null && reservas[i].getTotal() >= 0) {
+            if (reservas[i] != null) {
                 texto += reservas[i].mostrarReserva() + "\n";
             }
         }
@@ -124,50 +154,54 @@ public class GestorReserva {
         }
 
         String documento = JOptionPane.showInputDialog(
-                "Digite el documento del cliente a buscar:");
+                "Digite el numero de identificacion del cliente a buscar:");
 
         for (int i = 0; i < contadorReservas; i++) {
-            Cliente c = reservas[i].getCliente();
-            if (c != null && c.getDocumentoIdentidad().equals(documento)) {
-                JOptionPane.showMessageDialog(null,
-                        "Reserva encontrada:\n\n" + reservas[i].mostrarReserva());
-                return reservas[i];
+            if (reservas[i] != null) {
+                Cliente cliente = reservas[i].getCliente();
+                if (cliente != null && cliente.getDocumentoIdentidad().equals(documento)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Reserva encontrada:\n\n" + reservas[i].mostrarReserva());
+                    return reservas[i];
+                }
             }
         }
 
         JOptionPane.showMessageDialog(null,
-                "No se encontro una reserva activa para ese documento");
+                "No se encontro ninguna reserva activa para ese numero de identificacion");
         return null;
     }
 
     public void cancelarReserva() {
         if (contadorReservas == 0) {
-            JOptionPane.showMessageDialog(null,
-                    "No hay ningun registro");
+            JOptionPane.showMessageDialog(null, "No hay ningun registro");
             return;
         }
 
         String documento = JOptionPane.showInputDialog(
-                "Digite el documento del cliente para cancelar:");
+                "Digite numero de identificacion del cliente para cancelar:");
 
         for (int i = 0; i < contadorReservas; i++) {
-            Cliente c = reservas[i].getCliente();
-            if (c != null && c.getDocumentoIdentidad().equals(documento)) {
+            Cliente cliente = reservas[i].getCliente();
+            if (cliente != null && cliente.getDocumentoIdentidad().equals(documento)) {
 
-                Habitacion h = reservas[i].getHabitacion();
-                if (h != null) {
-                    h.cambiarDisponibilidad(true);
+                Habitacion habitacion = reservas[i].getHabitacion();
+                if (habitacion != null) {
+                    habitacion.cambiarDisponibilidad(true);
+                }
+                for (int j = i; j < contadorReservas - 1; j++) {
+                    reservas[j] = reservas[j + 1];
                 }
 
-                reservas[i].setTotal(0);
-                JOptionPane.showMessageDialog(null,
-                        "Reserva cancelada correctamente");
+                reservas[contadorReservas - 1] = null;
+                contadorReservas--;
+
+                JOptionPane.showMessageDialog(null, "Reserva cancelada correctamente");
                 return;
             }
         }
 
-        JOptionPane.showMessageDialog(null,
-                "No se encontro reserva para ese documento");
+        JOptionPane.showMessageDialog(null, "No se encontro reserva para ese numero de identificacion");
     }
 
     private Habitacion obtenerHabitacionDisponible() {
