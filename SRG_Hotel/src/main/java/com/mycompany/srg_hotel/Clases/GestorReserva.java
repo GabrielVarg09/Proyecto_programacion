@@ -44,12 +44,12 @@ public class GestorReserva {
                 }
 
                 if (repeticion) {
-                    JOptionPane.showMessageDialog(null, "La habitacion " + "#" + numero + " ya esta definida");
+                    JOptionPane.showMessageDialog(null, "La habitacion #" + numero + " ya esta definida");
                 } else {
                     break;
                 }
             }
-//
+
             String tipo = "";
             boolean valido = false;
 
@@ -86,18 +86,24 @@ public class GestorReserva {
                     "No hay espacio para mas reservas");
             return;
         }
+
         String lista = "Habitaciones disponibles:\n";
         for (int i = 0; i < contadorHabitaciones; i++) {
             if (habitaciones[i] != null && habitaciones[i].isDisponible()) {
-                lista += (i + 1) + ". Habitacion #" + habitaciones[i].getNumeroHabitacion() + " (" + habitaciones[i].getTipo() + ") " + "₡"
+                lista += (i + 1) + ". Habitacion #" + habitaciones[i].getNumeroHabitacion()
+                        + " (" + habitaciones[i].getTipo() + ") " + "₡"
                         + habitaciones[i].getPrecioPorNoche() + "\n";
             }
         }
+
         if (lista.equals("Habitaciones disponibles:\n")) {
             JOptionPane.showMessageDialog(null, "No hay habitaciones disponibles");
             return;
         }
-        int seleccion = Integer.parseInt(JOptionPane.showInputDialog(lista + "\nSeleccione una habitacion:"));
+
+        int seleccion = Integer.parseInt(
+                JOptionPane.showInputDialog(lista + "\nSeleccione una habitacion:"));
+
         while (true) {
 
             if (seleccion < 1 || seleccion > contadorHabitaciones) {
@@ -111,36 +117,52 @@ public class GestorReserva {
                     JOptionPane.showMessageDialog(null, "La habitacion esta ocupada.");
                 }
             }
-            seleccion = Integer.parseInt(JOptionPane.showInputDialog("Seleccione otra habitacion: " + "\n" + lista + "\n"));
+            seleccion = Integer.parseInt(
+                    JOptionPane.showInputDialog("Seleccione otra habitacion: " + "\n" + lista + "\n"));
 
         }
 
         Habitacion habitacionDisponible = habitaciones[seleccion - 1];
 
-        // Registrar datos del cliente
         Cliente cliente = new Cliente();
         cliente.registrarCliente();
 
-        String fechaEntrada = JOptionPane.showInputDialog(
-                "Digite la fecha de entrada (ej: 2025-11-20):");
+        String fechaEntrada = "";
+        boolean fechaEntradaValida = false;
 
-        String fechaSalida = JOptionPane.showInputDialog(
-                "Digite la fecha de salida (ej: 2025-11-22):");
+        while (!fechaEntradaValida) {
+            fechaEntrada = JOptionPane.showInputDialog(
+                    "Digite la fecha de entrada (formato AAAA-MM-DD):");
 
-        String lecturaNoches = JOptionPane.showInputDialog(
-                "Digite la cantidad de noches de la reserva (1-30)");
-        int noches = Integer.parseInt(lecturaNoches);
-        while(noches < 0 || noches > 30){
-                 lecturaNoches = JOptionPane.showInputDialog(
-                "Digite nuevamente la cantidad de noches de la reserva (1-30)");
-                noches = Integer.parseInt(lecturaNoches);
-        } 
-        
-        
+            if (esFechaValida(fechaEntrada)) {
+                fechaEntradaValida = true;
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Fecha de entrada invalida. Debe tener el formato AAAA-MM-DD.");
+            }
+        }
 
-        // Crear la reserva
+        int noches = 0;
+        boolean nochesValidas = false;
+
+        while (!nochesValidas) {
+            String lecturaNoches = JOptionPane.showInputDialog(
+                    "Digite la cantidad de noches de la reserva (maximo 30):");
+            noches = Integer.parseInt(lecturaNoches);
+
+            if (noches < 1) {
+                JOptionPane.showMessageDialog(null,
+                        "La cantidad de noches debe ser al menos 1.");
+            } else if (noches > 30) {
+                JOptionPane.showMessageDialog(null,
+                        "Mas de 30 noches no es posible");
+            } else {
+                nochesValidas = true;
+            }
+        }
+
         Reserva nueva = new Reserva(cliente, habitacionDisponible,
-                fechaEntrada, fechaSalida, noches);
+                fechaEntrada,noches);
 
         nueva.calcularTotal();
 
@@ -241,5 +263,45 @@ public class GestorReserva {
             }
         }
         return null;
+    }
+
+    private boolean esFechaValida(String fecha) {
+        if (fecha == null){
+            return false;
+        }
+        if (fecha.length() != 10) {
+            return false;
+        }
+        if (fecha.charAt(4) != '-' || fecha.charAt(7) != '-') {
+            return false;
+        }
+
+        for (int i = 0; i < fecha.length(); i++) {
+            if (i == 4 || i == 7) {
+                continue;
+            }
+            char c = fecha.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        String anioStr = fecha.substring(0, 4);
+        String mesStr = fecha.substring(5, 7);
+        String diaStr = fecha.substring(8, 10);
+
+        int anio = Integer.parseInt(anioStr);
+        int mes = Integer.parseInt(mesStr);
+        int dia = Integer.parseInt(diaStr);
+
+        if (anio < 1900) {
+            return false;
+        }
+        if (mes < 1 || mes > 12) {
+            return false;
+        }
+        if (dia < 1 || dia > 31) {
+            return false;
+        }
+        return true;
     }
 }

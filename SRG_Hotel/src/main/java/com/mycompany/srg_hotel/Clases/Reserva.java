@@ -13,7 +13,6 @@ public class Reserva {
     private Cliente cliente;
     private Habitacion habitacion;
     private String fechaEntrada;
-    private String fechaSalida;
     private int noches;
     private double total;
 
@@ -21,18 +20,16 @@ public class Reserva {
         cliente = null;
         habitacion = null;
         fechaEntrada = "";
-        fechaSalida = "";
         noches = 0;
         total = 0.0;
     }
 
     public Reserva(Cliente cliente, Habitacion habitacion,
-                   String fechaEntrada, String fechaSalida,
+                   String fechaEntrada,
                    int noches) {
         this.cliente = cliente;
         this.habitacion = habitacion;
         this.fechaEntrada = fechaEntrada;
-        this.fechaSalida = fechaSalida;
         this.noches = noches;
         this.total = 0.0;
     }
@@ -61,7 +58,6 @@ public class Reserva {
         }
 
         texto += "Fecha de entrada: " + fechaEntrada + "\n";
-        texto += "Fecha de salida: " + fechaSalida + "\n";
         texto += "Noches: " + noches + "\n";
         texto += "Total: " + total + "\n";
 
@@ -92,14 +88,6 @@ public class Reserva {
 
     public void setFechaEntrada(String fechaEntrada) {
         this.fechaEntrada = fechaEntrada;
-    }
-
-    public String getFechaSalida() {
-        return fechaSalida;
-    }
-
-    public void setFechaSalida(String fechaSalida) {
-        this.fechaSalida = fechaSalida;
     }
 
     public int getNoches() {
