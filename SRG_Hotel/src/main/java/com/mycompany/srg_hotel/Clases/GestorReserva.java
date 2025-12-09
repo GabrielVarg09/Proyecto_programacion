@@ -128,8 +128,15 @@ public class GestorReserva {
                 "Digite la fecha de salida (ej: 2025-11-22):");
 
         String lecturaNoches = JOptionPane.showInputDialog(
-                "Digite la cantidad de noches de la reserva:");
+                "Digite la cantidad de noches de la reserva (1-30)");
         int noches = Integer.parseInt(lecturaNoches);
+        while(noches < 0 || noches > 30){
+                 lecturaNoches = JOptionPane.showInputDialog(
+                "Digite nuevamente la cantidad de noches de la reserva (1-30)");
+                noches = Integer.parseInt(lecturaNoches);
+        } 
+        
+        
 
         // Crear la reserva
         Reserva nueva = new Reserva(cliente, habitacionDisponible,
