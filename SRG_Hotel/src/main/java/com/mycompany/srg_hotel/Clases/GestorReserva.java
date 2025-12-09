@@ -4,6 +4,7 @@
  */
 package com.mycompany.srg_hotel.Clases;
 
+import com.mycompany.srg_hotel.Enumeradores.TipoHabitacion;
 import javax.swing.JOptionPane;
 
 /**
@@ -41,13 +42,35 @@ public class GestorReserva {
                         break;
                     }
                 }
+
                 if (repeticion) {
                     JOptionPane.showMessageDialog(null, "La habitacion " + "#" + numero + " ya esta definida");
                 } else {
                     break;
                 }
             }
-            String tipo = JOptionPane.showInputDialog("Digite el tipo de habitacion (simple, doble, suite):");
+//
+            String tipo = "";
+            boolean valido = false;
+
+            while (!valido) {
+
+                tipo = JOptionPane.showInputDialog(
+                        "Digite el tipo de habitacion (simple, doble, suite):");
+
+                if (tipo.equalsIgnoreCase(TipoHabitacion.SIMPLE.name())
+                        || tipo.equalsIgnoreCase(TipoHabitacion.DOBLE.name())
+                        || tipo.equalsIgnoreCase(TipoHabitacion.SUITE.name())) {
+
+                    valido = true;
+
+                } else {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Tipo incorrecto. Solo puede ser: simple, doble o suite");
+                }
+            }
+
             String lecturaPrecio = JOptionPane.showInputDialog("Digite el precio por noche:");
             double precio = Double.parseDouble(lecturaPrecio);
 
@@ -67,7 +90,7 @@ public class GestorReserva {
         for (int i = 0; i < contadorHabitaciones; i++) {
             if (habitaciones[i] != null && habitaciones[i].isDisponible()) {
                 lista += (i + 1) + ". Habitacion #" + habitaciones[i].getNumeroHabitacion() + " (" + habitaciones[i].getTipo() + ") " + "₡"
-                + habitaciones[i].getPrecioPorNoche() + "\n";
+                        + habitaciones[i].getPrecioPorNoche() + "\n";
             }
         }
         if (lista.equals("Habitaciones disponibles:\n")) {
