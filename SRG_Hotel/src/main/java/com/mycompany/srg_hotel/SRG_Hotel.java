@@ -17,8 +17,6 @@ public class SRG_Hotel {
         MenuPrincipal menuprincipal = new MenuPrincipal();
         menuprincipal.mostrarMenu();
         
-       
-
     }
    
 }

@@ -58,6 +58,10 @@ public class Cliente {
             documentoIdentidad = JOptionPane.showInputDialog("Digite la identificacion nuevamente:");
         }
         telefono = JOptionPane.showInputDialog("Ingrese el telefono del cliente: ");
+        while (telefono.length() != 8) {
+            JOptionPane.showMessageDialog(null,"El telefono debe contener exactamente 8 dígitos");
+            telefono = JOptionPane.showInputDialog("Digite el telefono nuevamente:");
+        }
     }
 
     public String mostrarCliente() {

@@ -65,12 +65,9 @@ public class GestorReserva {
                     valido = true;
 
                 } else {
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Tipo incorrecto. Solo puede ser: simple, doble o suite");
+                    JOptionPane.showMessageDialog(null, "Tipo incorrecto. Solo puede ser: simple, doble o suite");
                 }
             }
-
             String lecturaPrecio = JOptionPane.showInputDialog("Digite el precio por noche:");
             double precio = Double.parseDouble(lecturaPrecio);
 
@@ -126,7 +123,6 @@ public class GestorReserva {
 
         Cliente cliente = new Cliente();
         cliente.registrarCliente();
-
         String fechaEntrada = "";
         boolean fechaEntradaValida = false;
 
@@ -144,12 +140,10 @@ public class GestorReserva {
 
         int noches = 0;
         boolean nochesValidas = false;
-
         while (!nochesValidas) {
             String lecturaNoches = JOptionPane.showInputDialog(
                     "Digite la cantidad de noches de la reserva (maximo 30):");
             noches = Integer.parseInt(lecturaNoches);
-
             if (noches < 1) {
                 JOptionPane.showMessageDialog(null,
                         "La cantidad de noches debe ser al menos 1.");
@@ -161,9 +155,7 @@ public class GestorReserva {
             }
         }
 
-        Reserva nueva = new Reserva(cliente, habitacionDisponible,
-                fechaEntrada,noches);
-
+        Reserva nueva = new Reserva(cliente, habitacionDisponible,fechaEntrada,noches);
         nueva.calcularTotal();
 
         reservas[contadorReservas] = nueva;
